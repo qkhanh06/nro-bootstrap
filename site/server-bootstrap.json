@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "bootstrapUrl": "https://qkhanh06.github.io/nro-bootstrap/server-bootstrap.json",
+  "timeoutSeconds": 6,
+  "tlsRequired": true,
+  "servers": [
+    {
+      "id": "main",
+      "name": "NRO 237",
+      "host": "desktop-bjqavat.tailda6a70.ts.net",
+      "port": 443,
+      "language": 0,
+      "tls": true,
+      "tlsServerName": "desktop-bjqavat.tailda6a70.ts.net",
+      "tlsCertificateSha256": ""
+    }
+  ]
+}

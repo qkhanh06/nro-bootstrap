@@ -1,0 +1,39 @@
+name: Publish Bootstrap
+
+on:
+  workflow_dispatch:
+    inputs:
+      publication_approved:
+        description: Network administrator has approved publishing this public bootstrap metadata
+        type: boolean
+        required: true
+        default: false
+
+permissions: {}
+
+jobs:
+  publish:
+    if: ${{ inputs.publication_approved }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    steps:
+      - name: Check out metadata repository
+        uses: actions/checkout@v6
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload only the site metadata
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

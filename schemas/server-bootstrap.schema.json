@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NRO Unity 6 public server bootstrap",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "bootstrapUrl", "timeoutSeconds", "tlsRequired", "servers"],
+  "properties": {
+    "version": { "const": 1 },
+    "bootstrapUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://[^?#]+$",
+      "description": "Exact public HTTPS URL of this published JSON; no credentials, query or fragment."
+    },
+    "timeoutSeconds": { "type": "integer", "minimum": 2, "maximum": 15 },
+    "tlsRequired": { "const": true },
+    "servers": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "host", "port", "language", "tlsServerName", "tls"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "name": { "type": "string", "minLength": 1, "maxLength": 32 },
+          "host": {
+            "type": "string",
+            "pattern": "^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.ts\\.net$",
+            "description": "Actual node.tailnet.ts.net hostname assigned by Tailscale."
+          },
+          "port": { "enum": [443, 8443, 10000] },
+          "language": { "type": "integer", "minimum": 0, "maximum": 2 },
+          "tlsServerName": { "type": "string", "description": "Must exactly match host for SNI and hostname validation." },
+          "tls": { "const": true },
+          "tlsCertificateSha256": {
+            "type": "string",
+            "pattern": "^(?:[A-Fa-f0-9]{64})?$",
+            "description": "Optional leaf SHA-256; empty uses normal system CA-chain and hostname validation."
+          }
+        }
+      }
+    }
+  }
+}
